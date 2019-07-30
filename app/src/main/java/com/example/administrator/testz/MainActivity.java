@@ -3,6 +3,7 @@ package com.example.administrator.testz;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.example.administrator.testz.model.HeartBeatBean;
 import com.example.administrator.testz.model.RestaurantMenuItem;
 import com.example.administrator.testz.model.RestaurantWithMenu;
 import com.google.gson.Gson;
@@ -28,7 +29,37 @@ public class MainActivity extends AppCompatActivity {
         //  threeJson();
         //     fourJson();  纯list数组
        // fiveJson();
-        sixJson();
+//        sixJson();
+        eightJson();
+
+
+    }
+
+    /**
+     * {
+     "action": "SET_NEST_STATUS_SWITCH",
+     "data": {
+     "deviceSn": "101",
+     "operation": "status",
+     "target": "control"
+     }
+     }
+     */
+    private void eightJson() {
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("deviceSn","101");   //机巢SN
+        data.put("target","control"); //控制开关
+        data.put("operation", "status");  //控制开关状态
+        HeartBeatBean heartBeatBean = new HeartBeatBean("SET_NEST_STATUS_SWITCH", data);
+        Gson gson = new Gson();
+        String userJson = gson.toJson(heartBeatBean);
+        System.out.println("sendNestStatusSwitch:" + userJson);
+
+        //果然如此  gson其实也是分层解析
+        Type amountCurrencyType = new TypeToken<HashMap<String, String>>(){}.getType();
+        HashMap<String, String> amountCurrency =
+                gson.fromJson( heartBeatBean.getData().toString(), amountCurrencyType);
+        System.out.println(heartBeatBean.getAction()+"=="+amountCurrency.get("deviceSn"));
 
     }
 
